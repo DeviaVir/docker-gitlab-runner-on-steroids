@@ -6,7 +6,8 @@ RUN apt-get update && \
                        curl \
                        gnupg2 \
                        software-properties-common \
-                       python3-pip
+                       python3-pip \
+                       python-pip
 RUN curl -fsSL https://download.docker.com/linux/$(. /etc/os-release; echo "$ID")/gpg > /tmp/dkey; apt-key add /tmp/dkey && \
     add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/$(. /etc/os-release; echo "$ID") $(lsb_release -cs) stable" && \
     apt-get update && \
