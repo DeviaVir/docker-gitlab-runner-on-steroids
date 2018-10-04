@@ -1,0 +1,22 @@
+# /etc/systemd/system/gitlab-runner.service
+[Unit]
+Description=Gitlab-Runner
+Wants=docker.target
+After=docker.service
+
+[Service]
+Restart=Always
+RestartSec=1
+ExecStartPre=-/bin/mkdir -p /srv/gitlab-runner/config
+ExecStart=/usr/bin/docker run \
+    --name gitlab-runner \
+    --restart always \
+    -v /var/run/docker.sock:/var/run/docker.sock \
+    -v /srv/gitlab-runner/config:/etc/gitlab-runner:Z \
+    -v /etc/ssl/private:/etc/ssl/private:ro \
+    deviavir/docker-gitlab-runner-on-steroids:latest
+ExecStop=/usr/bin/docker stop gitlab-runner
+ExecStopPost=-/usr/bin/docker rm -f gitlab-runner
+
+[Install]
+WantedBy=multi-user.target
